@@ -241,15 +241,15 @@ month_rat_sum_plot
 
 
 # Pivot Table
-from pivottablejs import pivot_ui
-import ipypivot as pt
+# from pivottablejs import pivot_ui
+# import ipypivot as pt
 
 
 # In[55]:
 
 
-pivot_table_top_10 = pivot_ui(top_10)
-pivot_table_top_10
+# pivot_table_top_10 = pivot_ui(top_10)
+# pivot_table_top_10
 
 
 # ### ------------------------------------------- Save Interactive Charts and Create Dashboard -------------------------------------------
@@ -260,14 +260,12 @@ pivot_table_top_10
 # Save interactive chart as HTML for functionality
 #### from bokeh.resources import INLINE
 #### hvplot.save(zoink_plot, 'OnlinePIP_Visits_Top10_SKUs_THD.html', resources=INLINE)
-os.chdir(r"C:\Users\jmurillo\Desktop\Misc\THD_Internet_Metrics_mktg\IndividualFiles")
+
 #Layout using Template
 template = pn.template.FastListTemplate(
     title='Internet Metrics - The Home Depot', 
     sidebar=[pn.pane.Markdown("# The Home Depot Online Sales"), 
-             pn.pane.Markdown("#### This Dashboard displays summary statistics from Home Depot's Online Sales Performance. The following is data pulled directly from HomeDepot/Vendor Drill, something we were previously lacking insight on. We have great data on how we sell our products to them, but now how our products perform in their stores/on HomeDepot.com"), 
-             pn.pane.PNG('Logo_SimpleGreen_White_Outline-Green.png', sizing_mode='scale_both'),
-             pn.pane.PNG('TheHomeDepot.png', sizing_mode='scale_both')],
+             pn.pane.Markdown("#### This Dashboard displays summary statistics from Home Depot's Online Sales Performance. The following is data pulled directly from HomeDepot/Vendor Drill, something we were previously lacking insight on. We have great data on how we sell our products to them, but now how our products perform in their stores/on HomeDepot.com")],
     main=[pn.Row(pn.Column(month_avg_visits, all_time_visits)),
           pn.Row(pn.Column(month_rat_sum_plot, ratings_df_sum))],
     accent_base_color="#88d8b0",
@@ -277,21 +275,7 @@ template = pn.template.FastListTemplate(
 template.servable();
 
 
-# In[20]:
 
-
-os.chdir(r"C:\Users\jmurillo\Desktop\HomeDepot_DashBoard\dash_env\IndividualFiles")
-
-
-# In[21]:
-
-
-# Save individual interactive plots 
-from bokeh.resources import INLINE
-hvplot.save(month_rat_sum_plot, 'month_rat_sum_plot.html', resources=INLINE)
-
-
-# In[ ]:
 
 
 
