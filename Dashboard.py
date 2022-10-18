@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[6]:
+# In[2]:
 
 
 # Analysis of THD Online Sales by Online SKU
@@ -31,6 +31,9 @@ import hvplot.pandas
 # from vega_datasets import data as vds
 import panel as pn
 pn.extension('tabulator')
+import requests
+import xlrd
+import io
 
 # import dash
 # import dash_core_components as dcc
@@ -38,55 +41,55 @@ pn.extension('tabulator')
 # from dash.dependencies import Output,Input
 
 
-# In[2]:
+# In[44]:
+
+
+url = "https://raw.githubusercontent.com/JulianAntonioMurillo/Panel-Interactive-Dashboard/main/internet_metrics_df.csv"
+internet_metrics = pd.read_csv(url)
+internet_metrics.head()
+
+
+# In[45]:
 
 
 # Reformat
-internet_metrics = pd.read_excel(r"C:\Users\jmurillo\Desktop\Misc\THD_Internet_Metrics_mktg\IndividualFiles\InternetRatingsReviews.xlsx")
-internet_metrics.head(8)
+
+# internet_metrics = pd.read_excel(r"C:\Users\jmurillo\Desktop\Misc\THD_Internet_Metrics_mktg\IndividualFiles\InternetRatingsReviews.xlsx")
+# internet_metrics.head(8)
 
 
-# Clean up VendorDrill formatting for df 1
-internet_metrics = internet_metrics.iloc[7:]
-internet_metrics.columns = internet_metrics.iloc[0]
-internet_metrics.drop(index=internet_metrics.index[0], 
-                  axis=0, 
-                  inplace=True)
 
 
-# Drop columns that contain NaN
-# internet_metrics = internet_metrics.iloc[:, :-3]
 
-# Drop last row (totals row from VendorDrill Report)
-internet_metrics = internet_metrics.drop(internet_metrics.index[len(internet_metrics)-1])
+
 
 
 # Change Dtypes/replace NA's with 0
-internet_metrics.update(internet_metrics[['Online Count of 1 Star Reviews +','Online Count of 2 Star Reviews +','Online Count of 3 Star Reviews +',
-                                          'Online Count of 4 Star Reviews +','Online Count of 5 Star Reviews +','Online PIP Visits +',
-                                          'Online PIP Conversion Rate +','Online Product Interaction Visits +','Online Gross Demand $ +',
-                                          'Online Order Units +','Online Sales $ +','Online Cancel Units +','Online Cancel $ +',
-                                          'Online Return $ +','Online Return Units +', 'is_multi_count','Week','Week_1','Year_1']].fillna(0))
+#internet_metrics.update(internet_metrics[['Online Count of 1 Star Reviews +','Online Count of 2 Star Reviews +','Online Count of 3 Star Reviews +',
+#                                          'Online Count of 4 Star Reviews +','Online Count of 5 Star Reviews +','Online PIP Visits +',
+#                                          'Online PIP Conversion Rate +','Online Product Interaction Visits +','Online Gross Demand $ +',
+#                                          'Online Order Units +','Online Sales $ +','Online Cancel Units +','Online Cancel $ +',
+#                                          'Online Return $ +','Online Return Units +', 'is_multi_count','Week','Week_1','Year_1']].fillna(0))
 
-internet_metrics = internet_metrics.astype({'Online Count of 1 Star Reviews +':'int64','Online Count of 2 Star Reviews +':'int64','Online Count of 3 Star Reviews +':'int64',
-                                          'Online Count of 4 Star Reviews +':'int64','Online Count of 5 Star Reviews +':'int64','Online PIP Visits +':'int64',
-                                          'Online PIP Conversion Rate +':'float64','Online Product Interaction Visits +':'int64','Online Gross Demand $ +':'float64',
-                                          'Online Order Units +':'int64','Online Sales $ +':'float64','Online Cancel Units +':'int64','Online Cancel $ +':'float64',
-                                          'Online Return $ +':'float64','Online Return Units +':'int64','Online Avg Rating  +':'float64',
-                                           'Online Current List Price $ +':'float64','is_multi_count':'int64'})
+#internet_metrics = internet_metrics.astype({'Online Count of 1 Star Reviews +':'int64','Online Count of 2 Star Reviews +':'int64','Online Count of 3 Star Reviews +':'int64',
+#                                          'Online Count of 4 Star Reviews +':'int64','Online Count of 5 Star Reviews +':'int64','Online PIP Visits +':'int64',
+#                                          'Online PIP Conversion Rate +':'float64','Online Product Interaction Visits +':'int64','Online Gross Demand $ +':'float64',
+#                                          'Online Order Units +':'int64','Online Sales $ +':'float64','Online Cancel Units +':'int64','Online Cancel $ +':'float64',
+#                                          'Online Return $ +':'float64','Online Return Units +':'int64','Online Avg Rating  +':'float64',
+#                                           'Online Current List Price $ +':'float64','is_multi_count':'int64'})
 
 # Convert Date to DateTime
 internet_metrics['DateTime_Start']= pd.to_datetime(internet_metrics['DateTime_Start'])
 internet_metrics['DateTime_End']= pd.to_datetime(internet_metrics['DateTime_End'])
 #Reformat month year to month year
-internet_metrics['Month_Year']= pd.to_datetime(internet_metrics['Month_Year'])
+internet_metrics['Month_Year']= pd.to_datetime(internet_metrics['Month_Year'], errors = 'coerce')
 internet_metrics['Month_Year'] = internet_metrics['Month_Year'].dt.strftime('%m/%Y')
 internet_metrics['Month_Year']= pd.to_datetime(internet_metrics['Month_Year'])
 
 internet_metrics.columns = internet_metrics.columns.str.replace(' ','_')
 
 
-# In[7]:
+# In[46]:
 
 
 # Find top 10 selling SKU's
@@ -96,7 +99,7 @@ group_by_sum = group_by_sum.sort_values(by=['Online_Sales_$_+'], ascending=False
 group_by_sum.head(10)
 
 
-# In[8]:
+# In[47]:
 
 
 # Select top 10 online selling items
@@ -120,7 +123,7 @@ top_5 = internet_metrics[(internet_metrics['Online_THD_SKU+'].str.contains("4314
 print(top_5.shape,top_10.shape)
 
 
-# In[5]:
+# In[48]:
 
 
 # plot top 10 over all time
@@ -130,7 +133,7 @@ print(top_5.shape,top_10.shape)
 #plt.show()
 
 
-# In[9]:
+# In[49]:
 
 
 # Interactive chart with drop-down menu all time by week end date
@@ -139,7 +142,7 @@ all_time_visits = top_10.hvplot(x='DateTime_End', y='Online_PIP_Visits_+', group
 all_time_visits
 
 
-# In[10]:
+# In[50]:
 
 
 # Interactive chart with drop-down menu all time by average grouped by month
@@ -180,7 +183,7 @@ month_avg_visits
 #plt.show()
 
 
-# In[13]:
+# In[51]:
 
 
 # Group by month and sum sales and canceled orders
@@ -205,7 +208,7 @@ ratings_df_sum[cols] = ratings_df_sum[cols].div(ratings_df_sum[cols].sum(axis=1)
 ratings_df_sum.head(12)
 
 
-# In[14]:
+# In[53]:
 
 
 # Create visual for total count of ratings across all rating types over time
@@ -234,7 +237,7 @@ month_rat_sum_plot
 # all_time_ratings_count
 
 
-# In[10]:
+# In[54]:
 
 
 # Pivot Table
@@ -242,7 +245,7 @@ from pivottablejs import pivot_ui
 import ipypivot as pt
 
 
-# In[11]:
+# In[55]:
 
 
 pivot_table_top_10 = pivot_ui(top_10)
@@ -251,7 +254,7 @@ pivot_table_top_10
 
 # ### ------------------------------------------- Save Interactive Charts and Create Dashboard -------------------------------------------
 
-# In[17]:
+# In[57]:
 
 
 # Save interactive chart as HTML for functionality
@@ -274,10 +277,18 @@ template = pn.template.FastListTemplate(
 template.servable();
 
 
-# In[ ]:
+# In[20]:
 
 
+os.chdir(r"C:\Users\jmurillo\Desktop\HomeDepot_DashBoard\dash_env\IndividualFiles")
 
+
+# In[21]:
+
+
+# Save individual interactive plots 
+from bokeh.resources import INLINE
+hvplot.save(month_rat_sum_plot, 'month_rat_sum_plot.html', resources=INLINE)
 
 
 # In[ ]:
