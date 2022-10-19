@@ -252,7 +252,7 @@ month_rat_sum_plot
 # Save interactive chart as HTML for functionality
 #### from bokeh.resources import INLINE
 #### hvplot.save(zoink_plot, 'OnlinePIP_Visits_Top10_SKUs_THD.html', resources=INLINE)
-os.chdir(r"C:\Users\jmurillo\Desktop\Misc\THD_Internet_Metrics_mktg\IndividualFiles")
+# os.chdir(r"C:\Users\jmurillo\Desktop\Misc\THD_Internet_Metrics_mktg\IndividualFiles")
 #Layout using Template
 template = pn.template.FastListTemplate(
     title='Internet Metrics - The Home Depot', 
