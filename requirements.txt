@@ -3,6 +3,3 @@ hvplot==0.8.1
 bokeh==2.4.3
 pandas
 numpy
-requests
-xlrd
-matplotlib
