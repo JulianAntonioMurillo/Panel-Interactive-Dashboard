@@ -7,13 +7,13 @@
 # Analysis of THD Online Sales by Online SKU
 ### For Brian/BOBJ
 ### Load in Correct Data and just reorganize it
-import sys
-sys.path.append(r'C:\Users\jmurillo\AppData\Local\Programs\Python\Python310\Lib\site-packages')
+# import sys
+# sys.path.append(r'C:\Users\jmurillo\AppData\Local\Programs\Python\Python310\Lib\site-packages')
 
 
 import pandas as pd
 import numpy as np
-import os
+# import os
 
 
 
