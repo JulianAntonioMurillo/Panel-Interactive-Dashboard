@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 # Analysis of THD Online Sales by Online SKU
@@ -14,26 +14,18 @@ sys.path.append(r'C:\Users\jmurillo\AppData\Local\Programs\Python\Python310\Lib\
 import pandas as pd
 import numpy as np
 import os
-import matplotlib.pyplot as plt
-import seaborn as sn
-from bs4 import BeautifulSoup
-import dataframe_image as dfi
-from plotnine import *
-import win32com.client as win32
-# from sklearn.linear_model import LinearRegression # Linear Regression Model
-# from sklearn.preprocessing import StandardScaler #Z-score variables
-# from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score #model evaluation
-import re
-from matplotlib.pyplot import figure
+
+
+
+
+
 # import altair as alt
 # import datum
 import hvplot.pandas
 # from vega_datasets import data as vds
 import panel as pn
 pn.extension('tabulator')
-import requests
-import xlrd
-import io
+
 
 # import dash
 # import dash_core_components as dcc
@@ -41,7 +33,7 @@ import io
 # from dash.dependencies import Output,Input
 
 
-# In[44]:
+# In[2]:
 
 
 url = "https://raw.githubusercontent.com/JulianAntonioMurillo/Panel-Interactive-Dashboard/main/internet_metrics_df.csv"
@@ -49,7 +41,7 @@ internet_metrics = pd.read_csv(url)
 internet_metrics.head()
 
 
-# In[45]:
+# In[3]:
 
 
 # Reformat
@@ -89,7 +81,7 @@ internet_metrics['Month_Year']= pd.to_datetime(internet_metrics['Month_Year'])
 internet_metrics.columns = internet_metrics.columns.str.replace(' ','_')
 
 
-# In[46]:
+# In[4]:
 
 
 # Find top 10 selling SKU's
@@ -99,7 +91,7 @@ group_by_sum = group_by_sum.sort_values(by=['Online_Sales_$_+'], ascending=False
 group_by_sum.head(10)
 
 
-# In[47]:
+# In[5]:
 
 
 # Select top 10 online selling items
@@ -123,7 +115,7 @@ top_5 = internet_metrics[(internet_metrics['Online_THD_SKU+'].str.contains("4314
 print(top_5.shape,top_10.shape)
 
 
-# In[48]:
+# In[6]:
 
 
 # plot top 10 over all time
@@ -133,7 +125,7 @@ print(top_5.shape,top_10.shape)
 #plt.show()
 
 
-# In[49]:
+# In[6]:
 
 
 # Interactive chart with drop-down menu all time by week end date
@@ -142,7 +134,7 @@ all_time_visits = top_10.hvplot(x='DateTime_End', y='Online_PIP_Visits_+', group
 all_time_visits
 
 
-# In[50]:
+# In[7]:
 
 
 # Interactive chart with drop-down menu all time by average grouped by month
@@ -164,7 +156,7 @@ month_avg_visits
 # If you visualize the graph as a loop... you can see that sales go down for outdoor eliminator during the fall/winter months... then pick back up in January into spring/summer.
 
 
-# In[7]:
+# In[9]:
 
 
 # Group by month and sum sales and canceled orders
@@ -183,7 +175,7 @@ month_avg_visits
 #plt.show()
 
 
-# In[51]:
+# In[8]:
 
 
 # Group by month and sum sales and canceled orders
@@ -208,7 +200,7 @@ ratings_df_sum[cols] = ratings_df_sum[cols].div(ratings_df_sum[cols].sum(axis=1)
 ratings_df_sum.head(12)
 
 
-# In[53]:
+# In[9]:
 
 
 # Create visual for total count of ratings across all rating types over time
@@ -237,7 +229,7 @@ month_rat_sum_plot
 # all_time_ratings_count
 
 
-# In[54]:
+# In[10]:
 
 
 # Pivot Table
@@ -245,7 +237,7 @@ month_rat_sum_plot
 # import ipypivot as pt
 
 
-# In[55]:
+# In[11]:
 
 
 # pivot_table_top_10 = pivot_ui(top_10)
@@ -254,13 +246,13 @@ month_rat_sum_plot
 
 # ### ------------------------------------------- Save Interactive Charts and Create Dashboard -------------------------------------------
 
-# In[57]:
+# In[14]:
 
 
 # Save interactive chart as HTML for functionality
 #### from bokeh.resources import INLINE
 #### hvplot.save(zoink_plot, 'OnlinePIP_Visits_Top10_SKUs_THD.html', resources=INLINE)
-
+os.chdir(r"C:\Users\jmurillo\Desktop\Misc\THD_Internet_Metrics_mktg\IndividualFiles")
 #Layout using Template
 template = pn.template.FastListTemplate(
     title='Internet Metrics - The Home Depot', 
@@ -275,7 +267,21 @@ template = pn.template.FastListTemplate(
 template.servable();
 
 
+# In[20]:
 
+
+# os.chdir(r"C:\Users\jmurillo\Desktop\HomeDepot_DashBoard\dash_env\IndividualFiles")
+
+
+# In[21]:
+
+
+# Save individual interactive plots 
+# from bokeh.resources import INLINE
+# hvplot.save(month_rat_sum_plot, 'month_rat_sum_plot.html', resources=INLINE)
+
+
+# In[ ]:
 
 
 
